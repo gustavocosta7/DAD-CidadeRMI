@@ -5,41 +5,28 @@
  */
 package view;
 
-import java.awt.event.ActionListener;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import modelo.Cidade;
-import modelo.CidadeTableModel;
-import remoto.ICidadeService;
+import controller.CidadeController;
 
 /**
  *
  * @author Aluno
  */
 public class CidadePrincipalTela extends javax.swing.JFrame {
-    List<Cidade> cidades = new ArrayList<>();
+    CidadeController cidadeController = new CidadeController();
     /**
      * Creates new form CidadePrincipal
      */
-    public CidadePrincipalTela() throws NotBoundException, MalformedURLException, RemoteException {
+    public CidadePrincipalTela(){
         initComponents();
         carregaComponentes();
     }
     
-    public void carregaComponentes() throws NotBoundException, MalformedURLException, RemoteException{
-        ICidadeService service = (ICidadeService) Naming.lookup("rmi://localhost:1099/CidadeService");
-        cidades = service.listarCidade();
-        System.out.println(cidades.get(0).getNome());
-        tabelaListarCidade.setModel(new CidadeTableModel(cidades));
+    public void carregaComponentes(){
+        cidadeController.carregaCidades();
+        tabelaListarCidade.setModel(cidadeController.carregaTabela());
+        
     }   
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -163,35 +150,13 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
 
     private void btnExcluirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCidadeActionPerformed
         // TODO add your handling code here:
-        try {
-           ICidadeService service = (ICidadeService) Naming.lookup("rmi://localhost:1099/CidadeService");
-            service.removerCidade(cidades.get(tabelaListarCidade.getSelectedRow()));
-            JOptionPane.showMessageDialog(null,"Excluido com muito suor@@");
-            carregaComponentes();
-        } catch (RemoteException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NotBoundException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        
+        cidadeController.setCidade(tabelaListarCidade.getSelectedRow());
         
     }//GEN-LAST:event_btnExcluirCidadeActionPerformed
 
     private void btnInserirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirCidadeActionPerformed
-        CidadeInserirTela frame = null;
-        try {
-            frame = new CidadeInserirTela();
-        } catch (NotBoundException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        CidadeInserirTela frame = new CidadeInserirTela();
+
         dispose();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);        
@@ -211,28 +176,7 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);  
     }//GEN-LAST:event_btnEditarCidadeActionPerformed
-
-    //capturas de evento dos cliques dos botoes
-    
-    //inserir
-    public void btnInserirCidadeEventListener(ActionListener btnInserirCidadeEventListener){
-        this.btnInserirCidade.addActionListener(btnInserirCidadeEventListener);
-    }
-    
-    //editar
-    public void btnEditarCidadeEventListener(ActionListener btnEditarCidadeEventListener){
-        this.btnEditarCidade.addActionListener(btnEditarCidadeEventListener);
-    }
-    
-    //excluir
-    public void btnExcluirCidadeEventListener(ActionListener btnExcluirCidadeEventListener){
-        this.btnExcluirCidade.addActionListener(btnExcluirCidadeEventListener);
-    }
-    
-    //sair
-    public void btnSairEventListener(ActionListener btnSairEventListener){
-        this.btnSair.addActionListener(btnSairEventListener);
-    }
+   
     
     
     /**
@@ -266,16 +210,8 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                CidadePrincipalTela cidadeTela = null;
-                try {
-                    cidadeTela = new CidadePrincipalTela();
-                } catch (NotBoundException ex) {
-                    Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CidadePrincipalTela.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                CidadePrincipalTela cidadeTela = new CidadePrincipalTela();
+
                 cidadeTela.setVisible(true);
                 cidadeTela.setLocationRelativeTo(null);
                 

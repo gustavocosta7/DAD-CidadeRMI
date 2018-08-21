@@ -5,15 +5,16 @@
  */
 package view;
 
+import controller.CidadeController;
+import controller.EstadoController;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.Cidade;
+import javax.swing.JOptionPane;
 import modelo.Estado;
 import remoto.ICidadeService;
 import util.DataUtil;
@@ -24,25 +25,25 @@ import util.DataUtil;
  * @author Aluno
  */
 public class CidadeInserirTela extends javax.swing.JFrame {
-    List<Estado> estados = new ArrayList<>();
+    CidadeController cidadeController = new CidadeController();
+    EstadoController estadoController = new EstadoController();
     /**
      * Creates new form CidadeInserir
      */
-    public CidadeInserirTela() throws NotBoundException, MalformedURLException, RemoteException {
+    public CidadeInserirTela(){
         initComponents();
         carregarEstado();
     }
 
-    public void carregarEstado() throws NotBoundException, MalformedURLException, RemoteException{
-        ICidadeService service = (ICidadeService) Naming.lookup("rmi://localhost:1099/CidadeService");
+    public void carregarEstado(){
+        
         cbEstado.removeAll();
-        estados.clear();
-        estados = service.listarEstado();
         
-        for (int i = 0; i < estados.size(); i++) {
-            cbEstado.addItem(estados.get(i).getNome());
+        estadoController.listarEstado();
+        
+        for(int i = 0; i < estadoController.getEstados().size(); i++){
+            cbEstado.addItem(estadoController.getEstados().get(i).getNome());
         }
-        
     }
     
     /**
@@ -177,31 +178,31 @@ public class CidadeInserirTela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarInserirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarInserirCidadeActionPerformed
-        CidadePrincipalTela telaPrincipal = new CidadePrincipalTela();
-        telaPrincipal.setVisible(true);
-        telaPrincipal.setLocationRelativeTo(null);
+        CidadePrincipalTela cidadePrincipalTela = new CidadePrincipalTela();
+        cidadePrincipalTela.setVisible(true);
+        cidadePrincipalTela.setLocationRelativeTo(null);
         dispose();
     }//GEN-LAST:event_btnCancelarInserirCidadeActionPerformed
 
     private void btnInserirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirCidadeActionPerformed
-        // TODO add your handling code here:
-        Estado estado = new Estado();
-        Cidade c = new Cidade(estados.get(cbEstado.getSelectedIndex()), tfNome.getText(),
-                Long.parseLong(tfPopulacao.getText()),DataUtil.ConverterTextoEmCalendar(tfFundacao.getText()),
-                Integer.parseInt(tfIBGE.getText()));
-        
-        try {
-            ICidadeService service = (ICidadeService) Naming.lookup("rmi://localhost:1099/CidadeService");
-            service.insereCidade(c);
-            
-        } catch (NotBoundException ex) {
-            Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
-            Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+//        // TODO add your handling code here:
+
+          String nome = tfNome.getText();
+          long populacao = Long.parseLong(tfPopulacao.getText());
+          Calendar data = DataUtil.ConverterTextoEmCalendar(tfFundacao.getText());
+          int ibge = Integer.parseInt(tfIBGE.getText());
+          Estado estado = estadoController.getEstados().get(cbEstado.getSelectedIndex());
+          
+          
+          cidadeController.getCidade().setNome(nome);
+          cidadeController.getCidade().setPopulacao(populacao);
+          cidadeController.getCidade().setFundacao(data);
+          cidadeController.getCidade().setIbge(ibge);
+          cidadeController.getCidade().setEstado(estado);
+          
+          if(cidadeController.inserir()){
+              JOptionPane.showMessageDialog(null,"Cidade inserida com sucesso");
+          }
     }//GEN-LAST:event_btnInserirCidadeActionPerformed
 
     private void cbEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbEstadoActionPerformed
@@ -239,15 +240,9 @@ public class CidadeInserirTela extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                try {
+              
                     new CidadeInserirTela().setVisible(true);
-                } catch (NotBoundException ex) {
-                    Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (RemoteException ex) {
-                    Logger.getLogger(CidadeInserirTela.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
             }
         });
     }

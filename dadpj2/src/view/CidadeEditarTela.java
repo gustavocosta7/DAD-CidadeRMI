@@ -246,10 +246,10 @@ public class CidadeEditarTela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarInserirCidade1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarInserirCidade1ActionPerformed
-        CidadePrincipalTela telaPrincipal = new CidadePrincipalTela();
-        telaPrincipal.setVisible(true);
-        telaPrincipal.setLocationRelativeTo(null);
-        dispose();
+//        CidadePrincipalTela telaPrincipal = new CidadePrincipalTela();
+//        telaPrincipal.setVisible(true);
+//        telaPrincipal.setLocationRelativeTo(null);
+//        dispose();
     }//GEN-LAST:event_btnCancelarInserirCidade1ActionPerformed
 
     /**
