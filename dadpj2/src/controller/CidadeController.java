@@ -30,12 +30,7 @@ public class CidadeController {
     private Cidade cidade = new Cidade();
     private List<Cidade> cidades = new ArrayList<>();
     private ICidadeService service;
-//    TELAS
     
-    private CidadeEditarTela cidadeEditarTela;
-    private CidadePrincipalTela cidadePrincipalTela;
-
-
 //CONSTRUTOR
     public CidadeController() {
         try {
@@ -93,79 +88,35 @@ public class CidadeController {
     }
     
     public boolean excluir() {
+        
         try {
-            int index = cidadePrincipalTela.getTabelaListarCidade();
-            cidade = cidades.get(index);
-
-            if (cidadePrincipalTela.mensagemEscolha("Essa operação excluirá o registro, deseja prosseguir?!") == JOptionPane.YES_OPTION) {
-
-                service.removerCidade(cidade);
-                cidadePrincipalTela.mensagemInfo("Cidade excluida com sucesso!");
-            }
-
-        } catch (RemoteException exception) {
-            Logger.getLogger(CidadeController.class.getName()).log(Level.SEVERE, null, exception);
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            cidadePrincipalTela.mensagemErro("Não há cidades selecionadas!");
+            service.removerCidade(cidade);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CidadeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        
         return true;
     }
     
-    public boolean editar(){
+    public boolean busca(String busca){
         try {
-            int index = cidadePrincipalTela.getTabelaListarCidade();
-            cidade = cidades.get(index);
-        } catch (ArrayIndexOutOfBoundsException ex) {
-            cidadePrincipalTela.mensagemErro("Não há cidades selecionadas!");
+            this.cidades.clear();
+            this.cidades = service.consultaCidade(busca);
+           
+            
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(CidadeController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return true;
     }
-    
-    public boolean limparLista(){
-        this.cidades.clear();
+
+    public boolean editar() {
+        try {
+            service.alterarCidade(this.cidade);
+        } catch (RemoteException ex) {
+            Logger.getLogger(CidadeController.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return true;
-    }
-    //FIM DAS OPERAÇÕES BÁSICAS
-    //GETTERS E SETTERS DAS TELAS
-     public CidadeEditarTela getCidadeEditarTela() {
-        return cidadeEditarTela;
-    }
-
-    public void setCidadeEditarTela(CidadeEditarTela cidadeEditarTela) {
-        this.cidadeEditarTela = cidadeEditarTela;
-    }
-
-    public CidadePrincipalTela getCidadePrincipalTela() {
-        return cidadePrincipalTela;
-    }
-
-    public void setCidadePrincipalTela(CidadePrincipalTela cidadePrincipalTela) {
-        this.cidadePrincipalTela = cidadePrincipalTela;
-    }
-    
-    //CARREGA COMPONENTES DAS TELAS
-    
-    public void carregaComponentesEditar(){
-        String nome = cidade.getNome();
-        String populacao = cidade.getPopulacao()+"";
-        String ibge = cidade.getIbge()+"";
-        String fundacao = DataUtil.ConverterDataEmTexto(cidade.getFundacao());
-        
-        cidadeEditarTela.setTfNome1(nome);
-        cidadeEditarTela.setTfPopulacao1(populacao);
-        cidadeEditarTela.setTfIBGE1(ibge);
-        cidadeEditarTela.setTfFundacao1(fundacao);
-        
-
-    }
-    
-    public void carregaComponentesPrincipal(){
-        getCidades().clear();
-        carregaCidades();
-        TableModel tabelaModelo = carregaTabela();
-        cidadePrincipalTela.setTabelaListarCidade(tabelaModelo);
-        
     }
 }

@@ -49,13 +49,11 @@ public class CidadeService extends UnicastRemoteObject implements ICidadeService
      }
 
     @Override
-    public Cidade consultaCidade(Cidade cidade) throws RemoteException {
+    public List<Cidade> consultaCidade(String pesquisa) throws RemoteException {
         
-        Cidade c; 
         CidadeDAO dao = new CidadeDAO();
-        c = dao.consultaCidade(cidade);
+        return dao.consultaCidade(pesquisa);
         
-        return  c;
         
      }
 

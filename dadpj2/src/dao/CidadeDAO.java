@@ -72,7 +72,7 @@ public class CidadeDAO {
         
          try {
             
-            String sql="UPDATE cidade SET cidnome=?, cidpopulacao=?, cidfundacao=?, cidibge=?, cidestid WHERE cidid=?";
+            String sql="UPDATE cidade SET cidnome=?, cidpopulacao=?, cidfundacao=?, cidibge=?, cidestid=? WHERE cidid=?";
             PreparedStatement instrucao=conexao.prepareStatement(sql);
             
             instrucao.setString(1, c.getNome());
@@ -80,26 +80,27 @@ public class CidadeDAO {
             instrucao.setDate(3, new java.sql.Date(c.getFundacao().getTimeInMillis()));
             instrucao.setInt(4, c.getIbge());
             instrucao.setInt(5, c.getEstado().getId());
+            instrucao.setInt(6, c.getId());
             instrucao.execute();
             
         } catch (SQLException ex) {
-            System.out.println("não conectado");
+            System.out.println(ex.getMessage());
         }
 
         
     }
     
-    public Cidade consultaCidade(Cidade cidade) {
-        
+    public List<Cidade> consultaCidade(String pesquisa) {
+        List<Cidade> cid = new ArrayList<>();
         try {
             
-            String sql = "SELECT cidid, cidpopulacao, cidfundacao, cidibge, cidestid FROM cidade WHERE nome LIKE ?";
+            String sql = "SELECT cidid,cidnome, cidpopulacao, cidfundacao, cidibge, cidestid FROM cidade WHERE cidnome LIKE ?";
             
             PreparedStatement instrucao = conexao.prepareStatement(sql);
-            instrucao.setString(1, cidade.getNome());
+            instrucao.setString(1, "%"+pesquisa+"%");
             ResultSet resultados = instrucao.executeQuery();
             
-            if (resultados != null) {
+            while (resultados.next()) {
                 Cidade c = new Cidade();
                 c.setId(resultados.getInt("cidid"));
                 c.setNome(resultados.getString("cidnome"));
@@ -111,17 +112,14 @@ public class CidadeDAO {
                 c.setIbge(resultados.getInt("cidibge"));
                 
                 c.setEstado(new EstadoDAO().pesquisaEstadoId(new Estado(resultados.getInt("cidestid"),"", 0)));
-                
-                return c;
-            } else {
-                return null;
-            }
+                cid.add(c);
+            } 
             
         } catch (SQLException ex) {
-            System.out.println("não conectado");
+            System.out.println(ex.getMessage());
             return null;
         }
-        
+        return cid;
     }
     
     public List<Estado> listarEstados() throws SQLException {

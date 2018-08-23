@@ -106,7 +106,8 @@ public class EstadoDAO {
             PreparedStatement instrucao = conexao.prepareStatement(sql);
             instrucao.setInt(1, e.getId());
             ResultSet resultados = instrucao.executeQuery();
-
+            resultados.next();
+            
             if (resultados != null) {
                 Estado estado = new Estado();
                 estado.setId(resultados.getInt("estid"));

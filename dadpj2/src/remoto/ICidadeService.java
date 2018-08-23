@@ -20,7 +20,7 @@ public interface ICidadeService extends Remote{
    public void insereCidade(Cidade c)throws RemoteException;
    public void removerCidade(Cidade c)throws RemoteException;
    public void alterarCidade(Cidade c)throws RemoteException;
-   public Cidade consultaCidade(Cidade cidade) throws RemoteException;
+   public List<Cidade> consultaCidade(String cidade) throws RemoteException;
    public List<Estado> listarEstado()throws RemoteException;
    public List<Cidade> listarCidade()throws RemoteException;
    

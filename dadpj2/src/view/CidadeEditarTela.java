@@ -7,7 +7,8 @@ package view;
 
 import controller.CidadeController;
 import controller.EstadoController;
-import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import util.DataUtil;
 
 /**
  *
@@ -25,11 +26,7 @@ public class CidadeEditarTela extends javax.swing.JFrame {
     
     public CidadeEditarTela(CidadeController cidadeController) {
         initComponents();
-        
         this.cidadeController = cidadeController;
-        cidadeController.setCidadeEditarTela(this);
-        cidadeController.carregaComponentesEditar();
-        
         carregaComponentes();
     }
 //CarregaComponentes
@@ -40,53 +37,26 @@ public class CidadeEditarTela extends javax.swing.JFrame {
         
         for(int i = 0; i < estadoController.getEstados().size(); i++){
             cbEstado1.addItem(estadoController.getEstados().get(i).getNome());
+    
+        
         }
+        
+        tfNome1.setText(cidadeController.getCidade().getNome());
+        tfFundacao1.setText(DataUtil.ConverterDataEmTexto(cidadeController.getCidade().getFundacao()));
+        tfIBGE1.setText(cidadeController.getCidade().getIbge()+"");
+        tfPopulacao1.setText(cidadeController.getCidade().getPopulacao()+"");
+        
+        int index = 0 ;
+        for(int i = 0 ; i < estadoController.getEstados().size();i++){
+            if(estadoController.getEstados().get(i).getNome().equals(cidadeController.getCidade().getEstado().getNome())){
+                index = i;
+            }
+        }
+        
+        cbEstado1.setSelectedIndex(index);
+        
     }
-    
-//GETTERS E SETTERS
-    public JComboBox<String> getCbEstado1() {
-        return cbEstado1;
-    }
-
-    public void setCbEstado1(JComboBox<String> cbEstado1,int index) {
-        this.cbEstado1 = cbEstado1;
-        this.cbEstado1.setSelectedIndex(index);
-    }
-
-    public String getTfFundacao1() {
-        return tfFundacao1.getText();
-    }
-
-    public void setTfFundacao1(String data) {
-        this.tfFundacao1.setText(data);
-    }
-
-    public String getTfIBGE1() {
-        return tfIBGE1.getText();
-    }
-
-    public void setTfIBGE1(String ibge) {
-        this.tfIBGE1.setText(ibge);
-    }
-
-    public String getTfNome1() {
-        return tfNome1.getText();
-    }
-
-    public void setTfNome1(String nome) {
-        this.tfNome1.setText(nome);
-    }
-
-    public String getTfPopulacao1() {
-        return tfPopulacao1.getText();
-    }
-
-    public void setTfPopulacao1(String nome) {
-        this.tfPopulacao1.setText(nome);
-    }
-    
-    
-    
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -220,7 +190,12 @@ public class CidadeEditarTela extends javax.swing.JFrame {
 
         jLabel7.setText("Editar Cidade");
 
-        btnInserirCidade1.setText("Inserir");
+        btnInserirCidade1.setText("Salvar");
+        btnInserirCidade1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInserirCidade1ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Nome");
 
@@ -318,6 +293,20 @@ public class CidadeEditarTela extends javax.swing.JFrame {
         telaPrincipal.setLocationRelativeTo(null);
         dispose();
     }//GEN-LAST:event_btnCancelarInserirCidade1ActionPerformed
+
+    private void btnInserirCidade1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirCidade1ActionPerformed
+        // TODO add your handling code here:
+        cidadeController.getCidade().setNome(tfNome1.getText());
+        cidadeController.getCidade().setFundacao(DataUtil.ConverterTextoEmCalendar(tfFundacao1.getText()));
+        cidadeController.getCidade().setIbge(Integer.parseInt(tfIBGE1.getText()));
+        cidadeController.getCidade().setPopulacao(Long.parseLong(tfPopulacao1.getText()));
+        
+        cidadeController.getCidade().setEstado(estadoController.getEstados().get(cbEstado1.getSelectedIndex()));
+        
+        cidadeController.editar();
+        
+        JOptionPane.showMessageDialog(null, "Alterado com sucesso!");
+    }//GEN-LAST:event_btnInserirCidade1ActionPerformed
 
     /**
      * @param args the command line arguments

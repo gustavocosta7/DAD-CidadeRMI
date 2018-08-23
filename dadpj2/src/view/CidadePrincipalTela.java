@@ -7,8 +7,6 @@ package view;
 
 import controller.CidadeController;
 import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -22,12 +20,12 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
     public CidadePrincipalTela(){
         initComponents();
         carregaComponentes();
+        
     }
     
-    public void carregaComponentes(){
-        cidadeController.setCidadePrincipalTela(this);
-        cidadeController.carregaComponentesPrincipal();
-        
+    public final void carregaComponentes(){
+        cidadeController.carregaCidades();
+        tabelaListarCidade.setModel(cidadeController.carregaTabela());
     }   
     
     /**
@@ -94,6 +92,11 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
         jLabel1.setText("Pesquisar Cidade");
 
         btnBuscarCidade.setText("Buscar");
+        btnBuscarCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarCidadeActionPerformed(evt);
+            }
+        });
 
         btnEditarCidade.setText("Editar");
         btnEditarCidade.addActionListener(new java.awt.event.ActionListener() {
@@ -153,9 +156,19 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
 
     private void btnExcluirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCidadeActionPerformed
         // TODO add your handling code here:
-
+        int index = tabelaListarCidade.getSelectedRow();
+        if(index < 0){
+            mensagemErro("Não a cidades selecionadas");
+            return;
+        }
+        
+        if(mensagemEscolha("Essa opção excluirá a cidade, deseja prosseguir?") == JOptionPane.YES_OPTION){
+            cidadeController.setCidade(cidadeController.getCidades().get(index));
             cidadeController.excluir();
+            mensagemInfo("Registro apagada com sucesso!");
             carregaComponentes();
+        }
+            
 
 
     }//GEN-LAST:event_btnExcluirCidadeActionPerformed
@@ -192,7 +205,14 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
     }//GEN-LAST:event_tfBuscarCidadeActionPerformed
     
     private void btnEditarCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCidadeActionPerformed
-        cidadeController.editar();
+        int index = tabelaListarCidade.getSelectedRow();
+                
+        if(index < 0){
+            mensagemErro("Não a cidades selecionadas");
+            return;
+        }
+        
+        cidadeController.setCidade(cidadeController.getCidades().get(index));
         
         CidadeEditarTela frame = new CidadeEditarTela(cidadeController);
         dispose();
@@ -200,16 +220,14 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
         frame.setVisible(true);  
     }//GEN-LAST:event_btnEditarCidadeActionPerformed
 
-    //GETTERS E SETTERS
-    public int getTabelaListarCidade() {
-        return tabelaListarCidade.getSelectedRow();
-    }
-
-    public void setTabelaListarCidade(TableModel tabelaModelo) {
-        this.tabelaListarCidade.setModel(tabelaModelo);
-    }
+    private void btnBuscarCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarCidadeActionPerformed
+        // TODO add your handling code here:
+        
+        cidadeController.busca(tfBuscarCidade.getText());
+        
+        tabelaListarCidade.setModel(cidadeController.carregaTabela());
+    }//GEN-LAST:event_btnBuscarCidadeActionPerformed
    
-    
     
     /**
      * @param args the command line arguments
