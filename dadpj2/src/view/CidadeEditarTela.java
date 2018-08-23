@@ -5,19 +5,88 @@
  */
 package view;
 
+import controller.CidadeController;
+import controller.EstadoController;
+import javax.swing.JComboBox;
+
 /**
  *
  * @author Aluno
  */
 public class CidadeEditarTela extends javax.swing.JFrame {
-
+    CidadeController cidadeController;
+    EstadoController estadoController = new EstadoController();
     /**
      * Creates new form CidadeEditarTela
      */
     public CidadeEditarTela() {
         initComponents();
     }
+    
+    public CidadeEditarTela(CidadeController cidadeController) {
+        initComponents();
+        
+        this.cidadeController = cidadeController;
+        cidadeController.setCidadeEditarTela(this);
+        cidadeController.carregaComponentesEditar();
+        
+        carregaComponentes();
+    }
+//CarregaComponentes
+    public final void carregaComponentes(){
+        cbEstado1.removeAll();
+        
+        estadoController.listarEstado();
+        
+        for(int i = 0; i < estadoController.getEstados().size(); i++){
+            cbEstado1.addItem(estadoController.getEstados().get(i).getNome());
+        }
+    }
+    
+//GETTERS E SETTERS
+    public JComboBox<String> getCbEstado1() {
+        return cbEstado1;
+    }
 
+    public void setCbEstado1(JComboBox<String> cbEstado1,int index) {
+        this.cbEstado1 = cbEstado1;
+        this.cbEstado1.setSelectedIndex(index);
+    }
+
+    public String getTfFundacao1() {
+        return tfFundacao1.getText();
+    }
+
+    public void setTfFundacao1(String data) {
+        this.tfFundacao1.setText(data);
+    }
+
+    public String getTfIBGE1() {
+        return tfIBGE1.getText();
+    }
+
+    public void setTfIBGE1(String ibge) {
+        this.tfIBGE1.setText(ibge);
+    }
+
+    public String getTfNome1() {
+        return tfNome1.getText();
+    }
+
+    public void setTfNome1(String nome) {
+        this.tfNome1.setText(nome);
+    }
+
+    public String getTfPopulacao1() {
+        return tfPopulacao1.getText();
+    }
+
+    public void setTfPopulacao1(String nome) {
+        this.tfPopulacao1.setText(nome);
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -162,8 +231,6 @@ public class CidadeEditarTela extends javax.swing.JFrame {
             }
         });
 
-        cbEstado1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel9.setText("População");
 
         jLabel10.setText("Fundação");
@@ -246,10 +313,10 @@ public class CidadeEditarTela extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCancelarInserirCidade1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarInserirCidade1ActionPerformed
-//        CidadePrincipalTela telaPrincipal = new CidadePrincipalTela();
-//        telaPrincipal.setVisible(true);
-//        telaPrincipal.setLocationRelativeTo(null);
-//        dispose();
+        CidadePrincipalTela telaPrincipal = new CidadePrincipalTela();
+        telaPrincipal.setVisible(true);
+        telaPrincipal.setLocationRelativeTo(null);
+        dispose();
     }//GEN-LAST:event_btnCancelarInserirCidade1ActionPerformed
 
     /**

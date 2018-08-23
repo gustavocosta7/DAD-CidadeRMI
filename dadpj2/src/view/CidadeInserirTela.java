@@ -7,16 +7,9 @@ package view;
 
 import controller.CidadeController;
 import controller.EstadoController;
-import java.net.MalformedURLException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.Calendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import modelo.Estado;
-import remoto.ICidadeService;
 import util.DataUtil;
 
 
@@ -35,7 +28,7 @@ public class CidadeInserirTela extends javax.swing.JFrame {
         carregarEstado();
     }
 
-    public void carregarEstado(){
+    public final void carregarEstado(){
         
         cbEstado.removeAll();
         

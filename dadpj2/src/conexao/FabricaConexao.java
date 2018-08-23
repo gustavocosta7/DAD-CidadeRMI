@@ -18,7 +18,7 @@ public class FabricaConexao {
         try {
             String host = "jdbc:mysql://localhost/dad";
             String user = "root";
-            String pass = "root";
+            String pass = "";
             
             return DriverManager.getConnection(host, user, pass);
         } catch (SQLException e) {

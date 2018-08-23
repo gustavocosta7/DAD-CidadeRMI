@@ -6,6 +6,9 @@
 package view;
 
 import controller.CidadeController;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -22,8 +25,8 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
     }
     
     public void carregaComponentes(){
-        cidadeController.carregaCidades();
-        tabelaListarCidade.setModel(cidadeController.carregaTabela());
+        cidadeController.setCidadePrincipalTela(this);
+        cidadeController.carregaComponentesPrincipal();
         
     }   
     
@@ -150,10 +153,28 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
 
     private void btnExcluirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCidadeActionPerformed
         // TODO add your handling code here:
-        cidadeController.setCidade(tabelaListarCidade.getSelectedRow());
-        
-    }//GEN-LAST:event_btnExcluirCidadeActionPerformed
 
+            cidadeController.excluir();
+            carregaComponentes();
+
+
+    }//GEN-LAST:event_btnExcluirCidadeActionPerformed
+//  MENSAGENS
+    public int mensagemEscolha(String mensagem){
+      return JOptionPane.showConfirmDialog(null, mensagem, "Exlusão de registro", JOptionPane.ERROR_MESSAGE);
+    }
+    
+    public void mensagemInfo(String mensagem){
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+    public void mensagemErro(String mensagem){
+        JOptionPane.showMessageDialog(null, mensagem,"Erro na operação",JOptionPane.ERROR_MESSAGE);
+    
+    }
+    
+    //FIM DAS MENSAGENS
+    
+    
     private void btnInserirCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirCidadeActionPerformed
         CidadeInserirTela frame = new CidadeInserirTela();
 
@@ -169,13 +190,24 @@ public class CidadePrincipalTela extends javax.swing.JFrame {
     private void tfBuscarCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfBuscarCidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfBuscarCidadeActionPerformed
-
+    
     private void btnEditarCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarCidadeActionPerformed
-        CidadeEditarTela frame = new CidadeEditarTela();
+        cidadeController.editar();
+        
+        CidadeEditarTela frame = new CidadeEditarTela(cidadeController);
         dispose();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);  
     }//GEN-LAST:event_btnEditarCidadeActionPerformed
+
+    //GETTERS E SETTERS
+    public int getTabelaListarCidade() {
+        return tabelaListarCidade.getSelectedRow();
+    }
+
+    public void setTabelaListarCidade(TableModel tabelaModelo) {
+        this.tabelaListarCidade.setModel(tabelaModelo);
+    }
    
     
     
